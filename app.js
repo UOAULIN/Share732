@@ -12,3 +12,24 @@ async function queryByDate(year, month){
 
     return orders;
 }
+
+// 登录密码验证
+async function loginUser(identifier, password) {
+    // 通过email或username查找用户
+    const user = await User.findOne({ $or: [{ email: identifier }, { username: identifier }] });
+
+    if (!user) {
+        console.log('User not found.');
+        return false;
+    }
+
+    // 验证密码
+    const isPasswordValid = await user.verifyPassword(password);
+    if (isPasswordValid) {
+        console.log('Password is valid.');
+        return true;
+    } else {
+        console.log('Password is invalid.');
+        return false;
+    }
+}
